@@ -31,9 +31,10 @@ export interface RepoResponse {
 
 export interface RepoRequest {
     q: string;
-    sort?: string;
-    per_page?: string;
-    page?: string;
+    sort: "stars" | "forks" | "help-wanted-issues" | "updated";
+    order: "asc" | "desc";
+    per_page: string;
+    page: string;
 }
 
 export interface ErrorResponse {

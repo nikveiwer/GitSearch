@@ -1,7 +1,7 @@
 import { type Repo, type RepoResponse } from "../models";
 import { slicer } from "../utils/Slicer";
 
-export function fromSourceToRepo(source: RepoResponse["items"][0]): Repo {
+export function fromSourceToRepo(source: RepoResponse["items"][number]): Repo {
     return {
         id: source.id,
         name: source.name,

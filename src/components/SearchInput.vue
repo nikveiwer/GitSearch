@@ -13,12 +13,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div>
+    <div class="w-full">
         <label
             for="search"
             class="block text-sm font-medium leading-6 text-gray-900"
         ></label>
-        <div class="relative mt-2 rounded-md shadow-sm">
+        <div class="relative mt-2 max-w-sm rounded-md shadow-sm">
             <div
                 class="pointer-events-none absolute inset-y-0 top-[2px] left-0 flex items-center pl-2"
             >

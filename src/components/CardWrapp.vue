@@ -52,14 +52,22 @@ watch(
     }
 );
 
-watch([() => props.per_page, () => props.page], () => {
-    getRepos(props);
-});
+watch(
+    [
+        () => props.per_page,
+        () => props.page,
+        () => props.sort,
+        () => props.order,
+    ],
+    () => {
+        getRepos(props);
+    }
+);
 </script>
 
 <template>
     <div
-        class="mt-7 grid grid-cols-1 gap-x-6 self-center gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+        class="mt-7 grid grid-cols-1 gap-x-6 self-center justify-items-center gap-y-10 sm:justify-items-stretch sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
     >
         <CardSkeleton v-if="isLoading" v-for="i in 10" :key="i" />
 

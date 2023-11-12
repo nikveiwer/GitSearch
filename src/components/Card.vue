@@ -16,7 +16,7 @@ const {
 
 <template>
     <div
-        class="max-w-xs bg-white dark:bg-slate-800 rounded-lg px-5 pt-3 pb-5 ring-1 ring-slate-900/5 shadow-xl flex flex-col gap-5"
+        class="w-80 bg-white dark:bg-slate-800 rounded-lg px-5 pt-3 pb-5 ring-1 ring-slate-900/5 shadow-xl flex flex-col gap-5"
     >
         <a
             :href="repoLink"

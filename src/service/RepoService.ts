@@ -10,8 +10,6 @@ export default class RepoService {
     ): Promise<AxiosResponse<RepoResponse>> {
         const url = objToParams(reqParams, BASE_REPO_URL);
 
-        console.log(reqParams.q);
-
         return $api.get<RepoResponse>(url);
     }
 }
