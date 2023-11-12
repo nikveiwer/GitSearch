@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Ref, computed, onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
 
 import Card from "./Card.vue";
 import CardSkeleton from "./CardSkeleton.vue";
