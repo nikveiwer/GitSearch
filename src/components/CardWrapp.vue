@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Ref, onMounted, ref, watch } from "vue";
+import { Ref, computed, onMounted, ref, watch } from "vue";
 import Card from "./Card.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import Error from "./Error.vue";
+import NoResults from "./NoResults.vue";
 import { RepoRequest, type Repo, ErrorResponse } from "../models";
 import RepoService from "../service/RepoService";
 import { fromSourceToRepo } from "../mappers/fromSourceToRepo";
@@ -17,6 +18,10 @@ const emit = defineEmits<{
 const isLoading: Ref<boolean> = ref(true);
 const errorMessage: Ref<string> = ref("");
 const repos: Ref<Repo[]> = ref([]);
+
+const noResults = computed(
+    () => !errorMessage.value && !isLoading.value && repos.value.length == 0
+);
 
 const getRepos = async (params: RepoRequest) => {
     isLoading.value = true;
@@ -77,4 +82,5 @@ watch(
     </div>
 
     <Error v-if="!!errorMessage" :error-message="errorMessage"></Error>
+    <NoResults v-if="noResults" />
 </template>

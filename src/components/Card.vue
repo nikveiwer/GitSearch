@@ -40,7 +40,7 @@ const {
             >
         </a>
 
-        <div class="min-h-[150px] text-gray-900 dark:text-gray-400">
+        <div class="min-h-[150px] text-gray-900 dark:text-gray-400 break-words">
             {{ description }}
         </div>
 
