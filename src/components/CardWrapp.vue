@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { Ref, computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+
 import Card from "./Card.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import Error from "./Error.vue";
 import NoResults from "./NoResults.vue";
-import { RepoRequest, type Repo, ErrorResponse } from "../models";
+
+import { type RepoRequest, type Repo, type ErrorResponse } from "../models";
+
 import RepoService from "../service/RepoService";
+
 import { fromSourceToRepo } from "../mappers/fromSourceToRepo";
 import { debounce } from "../utils/Debounce";
+import { pushParamsToHistory } from "../utils/PushParamsToHistory";
 
 const props = defineProps<RepoRequest>();
 
@@ -15,6 +21,9 @@ const emit = defineEmits<{
     setTotalCount: [totalCount: number];
     resetPage: [];
 }>();
+
+const router = useRouter();
+console.log(router);
 
 const isLoading: Ref<boolean> = ref(true);
 const errorMessage: Ref<string> = ref("");
@@ -28,10 +37,14 @@ const getRepos = async (params: RepoRequest) => {
     isLoading.value = true;
     errorMessage.value = "";
 
+    console.log(router);
+
     try {
         const { data } = await RepoService.getRepos(params);
 
         emit("setTotalCount", data.total_count);
+
+        pushParamsToHistory(params);
 
         repos.value = data.items.map(fromSourceToRepo);
     } catch (e) {

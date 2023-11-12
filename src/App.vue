@@ -4,7 +4,7 @@ import Search from "./components/SearchInput.vue";
 import Sort from "./components/Sort.vue";
 import CardWrapp from "./components/CardWrapp.vue";
 import Pagination from "./components/Pagination.vue";
-import { type Ref, ref } from "vue";
+import { type Ref, ref, onMounted } from "vue";
 import { sortParams, orderParams } from "./constants";
 import { RepoRequest } from "./models";
 
@@ -14,6 +14,17 @@ const perPage: Ref<number> = ref(10);
 const page: Ref<number> = ref(1);
 const sort: Ref<RepoRequest["sort"]> = ref("stars");
 const order: Ref<RepoRequest["order"]> = ref("asc");
+
+onMounted(() => {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+
+    searchString.value = urlParams.get("q") ?? "Vue";
+    perPage.value = +(urlParams.get("per_page") ?? 10);
+    page.value = +(urlParams.get("page") ?? 1);
+    sort.value = (urlParams.get("sort") as RepoRequest["sort"]) ?? "stars";
+    order.value = (urlParams.get("order") as RepoRequest["order"]) ?? "asc";
+});
 
 const onPerPageChange = (value: number) => {
     perPage.value = value;
