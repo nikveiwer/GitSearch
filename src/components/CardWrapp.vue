@@ -22,9 +22,6 @@ const emit = defineEmits<{
     resetPage: [];
 }>();
 
-const router = useRouter();
-console.log(router);
-
 const isLoading: Ref<boolean> = ref(true);
 const errorMessage: Ref<string> = ref("");
 const repos: Ref<Repo[]> = ref([]);
@@ -36,8 +33,6 @@ const noResults = computed(
 const getRepos = async (params: RepoRequest) => {
     isLoading.value = true;
     errorMessage.value = "";
-
-    console.log(router);
 
     try {
         const { data } = await RepoService.getRepos(params);
