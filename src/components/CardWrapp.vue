@@ -1,33 +1,59 @@
 <script setup lang="ts">
-import { Ref, onMounted, ref } from "vue";
+import { Ref, onMounted, ref, watch } from "vue";
 import Card from "./Card.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import Error from "./Error.vue";
-import { type Repo } from "../models";
+import { RepoRequest, type Repo, ErrorResponse } from "../models";
 import RepoService from "../service/RepoService";
 import { fromSourceToRepo } from "../mappers/fromSourceToRepo";
+import { debounce } from "../utils/Debounce";
+
+const props = defineProps<RepoRequest>();
+
+const emit = defineEmits<{
+    setTotalCount: [totalCount: number];
+}>();
 
 const isLoading: Ref<boolean> = ref(true);
-const isError: Ref<boolean> = ref(false);
+const errorMessage: Ref<string> = ref("");
 const repos: Ref<Repo[]> = ref([]);
 
-const getRepos = async () => {
+const getRepos = async (params: RepoRequest) => {
     isLoading.value = true;
+    errorMessage.value = "";
 
     try {
-        const { data } = await RepoService.getRepos();
+        const { data } = await RepoService.getRepos(params);
+
+        emit("setTotalCount", data.total_count);
 
         repos.value = data.items.map(fromSourceToRepo);
     } catch (e) {
-        console.error(e);
-        isError.value = true;
+        const message = (e as ErrorResponse).response.data.message;
+        console.error(message);
+        errorMessage.value = message;
     }
 
     isLoading.value = false;
 };
 
+const debouncedGetRepos = debounce(getRepos, 500);
+
 onMounted(() => {
-    getRepos();
+    getRepos(props);
+});
+
+watch(
+    () => props.q,
+    (newValue) => {
+        if (newValue) {
+            debouncedGetRepos(props);
+        }
+    }
+);
+
+watch([() => props.per_page, () => props.page], () => {
+    getRepos(props);
 });
 </script>
 
@@ -37,10 +63,10 @@ onMounted(() => {
     >
         <CardSkeleton v-if="isLoading" v-for="i in 10" :key="i" />
 
-        <template v-else-if="!isError" v-for="item in repos">
+        <template v-else-if="!errorMessage" v-for="item in repos">
             <Card v-bind="item"></Card>
         </template>
     </div>
 
-    <Error v-if="isError"></Error>
+    <Error v-if="!!errorMessage" :error-message="errorMessage"></Error>
 </template>

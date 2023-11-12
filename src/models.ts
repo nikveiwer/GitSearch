@@ -28,3 +28,18 @@ export interface RepoResponse {
         stargazers_count: number;
     }[];
 }
+
+export interface RepoRequest {
+    q: string;
+    sort?: string;
+    per_page?: string;
+    page?: string;
+}
+
+export interface ErrorResponse {
+    response: {
+        data: {
+            message: string;
+        };
+    };
+}

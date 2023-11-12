@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Ref, onMounted, ref } from "vue";
-import RepoService from "../service/RepoService";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 
 onMounted(() => {
@@ -13,10 +12,6 @@ onMounted(() => {
     } else {
         isDarkTheme.value = false;
     }
-
-    RepoService.getRepos()
-        .then((data) => console.log(data))
-        .catch((e) => console.log(e));
 });
 
 const isDarkTheme: Ref<boolean> = ref(true);

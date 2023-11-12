@@ -1,9 +1,17 @@
 import { AxiosResponse } from "axios";
-import { RepoResponse } from "../models";
+import { RepoRequest, RepoResponse } from "../models";
 import { $api } from "./AxiosSetup";
+import { objToParams } from "../utils/ObjToParams";
+import { BASE_REPO_URL } from "../constants";
 
 export default class RepoService {
-    static async getRepos(): Promise<AxiosResponse<RepoResponse>> {
-        return $api.get<RepoResponse>("/repositories?q=repo");
+    static async getRepos(
+        reqParams: RepoRequest
+    ): Promise<AxiosResponse<RepoResponse>> {
+        const url = objToParams(reqParams, BASE_REPO_URL);
+
+        console.log(reqParams.q);
+
+        return $api.get<RepoResponse>(url);
     }
 }
