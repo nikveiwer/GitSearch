@@ -25,10 +25,12 @@ const onPageChange = (value: number) => {
 
 const onSortChange = (value: RepoRequest["sort"]) => {
     sort.value = value;
+    page.value = 1;
 };
 
 const onOrderChange = (value: RepoRequest["order"]) => {
     order.value = value;
+    page.value = 1;
 };
 </script>
 
@@ -63,6 +65,7 @@ const onOrderChange = (value: RepoRequest["order"]) => {
                         totalCount = newCount;
                     }
                 "
+                @reset-page="page = 1"
                 :q="searchString"
                 :sort="sort"
                 :order="order"

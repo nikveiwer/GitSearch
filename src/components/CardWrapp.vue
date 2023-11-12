@@ -13,6 +13,7 @@ const props = defineProps<RepoRequest>();
 
 const emit = defineEmits<{
     setTotalCount: [totalCount: number];
+    resetPage: [];
 }>();
 
 const isLoading: Ref<boolean> = ref(true);
@@ -42,7 +43,15 @@ const getRepos = async (params: RepoRequest) => {
     isLoading.value = false;
 };
 
-const debouncedGetRepos = debounce(getRepos, 500);
+const searchWhenInput = (props: RepoRequest) => {
+    if (+props.page !== 1) {
+        emit("resetPage");
+    } else {
+        getRepos(props);
+    }
+};
+
+const debouncedSearchWhenInput = debounce(searchWhenInput, 500);
 
 onMounted(() => {
     getRepos(props);
@@ -52,7 +61,7 @@ watch(
     () => props.q,
     (newValue) => {
         if (newValue) {
-            debouncedGetRepos(props);
+            debouncedSearchWhenInput(props);
         }
     }
 );
